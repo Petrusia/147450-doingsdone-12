@@ -3,6 +3,7 @@
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 require_once(__DIR__ . '/data.php');
+require_once(__DIR__ . '/functions.php');
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -49,7 +50,12 @@ require_once(__DIR__ . '/data.php');
                         foreach ($categories as $category) : ?>
                             <li class="main-navigation__list-item">
                                 <a class="main-navigation__list-item-link" href="#"><?= $category; ?></a>
-                                <span class="main-navigation__list-item-count">0</span>
+                                <!--  Для показа количества задач у каждого из проектов-->
+                                <!--  (span.main-navigation__list-item-count) используйте вашу функцию.-->
+                                <span class="main-navigation__list-item-count"><?= getTasksCount(
+                                        $tasks,
+                                        $category
+                                    ) ?></span>
                             </li>
                         <?php
                         endforeach; ?>
