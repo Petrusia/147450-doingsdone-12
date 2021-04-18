@@ -1,0 +1,53 @@
+version: '3.9'
+
+networks:
+  doingsdone:
+    name: doingsdone
+
+services:
+  nginx:
+    build:
+      context: ./docker
+      dockerfile: nginx.dockerfile
+    container_name: nginx_dd
+    depends_on:
+      - php
+      - mysql
+    ports:
+      - 81:80
+      - 444:443
+    volumes:
+      - . :/var/www/html
+    networks:
+      - doingsdone
+
+
+  php:
+    build:
+      context: ./docker
+      dockerfile: php.dockerfile
+    container_name: php_dd
+    volumes:
+      - . :/var/www/html
+    networks:
+      - doingsdone
+
+  mysql:
+    image: mysql:5.7.33
+    container_name: mysql_dd
+    ports:
+      - 4306:3306
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    environment:
+      MYSQL_DATABASE: doingsdonedb
+      MYSQL_USER: doingsdone
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    restart: always
+    networks:
+      - doingsdone
+
+
+
